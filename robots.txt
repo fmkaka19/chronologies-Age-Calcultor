@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://chronological-age-calculator.vercel.app/sitemap.xml
+Sitemap: https://chronologies-age-calcultor.vercel.app/sitemap.xml

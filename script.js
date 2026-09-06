@@ -22,6 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const labelMonths = document.getElementById('labelMonths');
   const labelDays = document.getElementById('labelDays');
   const formattedSummaryText = document.getElementById('formattedSummaryText');
+  const testFormatValue = document.getElementById('testFormatValue');
+  const btnCopyTesting = document.getElementById('btnCopyTesting');
+  const copyBtnText = document.getElementById('copyBtnText');
 
   // Information Card Elements
   const dayOfBirthText = document.getElementById('dayOfBirthText');
@@ -47,6 +50,24 @@ document.addEventListener('DOMContentLoaded', () => {
   // Event Listeners
   ageForm.addEventListener('submit', handleCalculate);
   btnReset.addEventListener('click', handleReset);
+
+  if (btnCopyTesting) {
+    btnCopyTesting.addEventListener('click', () => {
+      if (!testFormatValue) return;
+      const textToCopy = testFormatValue.textContent;
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        if (copyBtnText) copyBtnText.textContent = 'Copied!';
+        setTimeout(() => {
+          if (copyBtnText) copyBtnText.textContent = 'Copy';
+        }, 2000);
+      }).catch(() => {
+        if (copyBtnText) copyBtnText.textContent = 'Copied!';
+        setTimeout(() => {
+          if (copyBtnText) copyBtnText.textContent = 'Copy';
+        }, 2000);
+      });
+    });
+  }
 
   dobInput.addEventListener('input', clearError);
   asOfInput.addEventListener('input', () => {
@@ -166,6 +187,13 @@ document.addEventListener('DOMContentLoaded', () => {
     labelDays.textContent = res.days === 1 ? 'Day' : 'Days';
 
     formattedSummaryText.textContent = `${res.years} ${labelYears.textContent}, ${res.months} ${labelMonths.textContent}, ${res.days} ${labelDays.textContent}`;
+
+    // Standardized Testing Clinical Format (Y;MM;DD)
+    if (testFormatValue) {
+      const mmStr = String(res.months).padStart(2, '0');
+      const ddStr = String(res.days).padStart(2, '0');
+      testFormatValue.textContent = `${res.years};${mmStr};${ddStr}`;
+    }
 
     // Day of Birth
     const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -289,6 +317,12 @@ document.addEventListener('DOMContentLoaded', () => {
     asOfInput.value = todayFormatted;
     dobInput.max = todayFormatted;
     clearError();
+    if (testFormatValue) {
+      testFormatValue.textContent = '0;00;00';
+    }
+    if (copyBtnText) {
+      copyBtnText.textContent = 'Copy';
+    }
     resultsSection.classList.add('hidden');
     dobInput.focus();
   }
